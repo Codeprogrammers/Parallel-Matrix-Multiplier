@@ -1,0 +1,23 @@
+#!/bin/bash
+#PBS -l nodes=8:ppn=2
+#PBS -l walltime=:01:00
+#PBS -o /home/cpsc435_s12/mhurson/lab5/lab5_out
+#PBS -j oe
+#PBS -N mhurson_lab3
+date
+export NPROCS=`wc -l $PBS_NODEFILE |gawk '//{print $1}'`
+export MCA_OPTS="--mca btl_tcp_if_include eth0 --mca oob_tcp_if_include eth0 --mca
+btl_tcp_endpoint_cache 65536 --mca oob_tcp_peer_retries 120 --mca oob_tcp_listen_mode
+listen_thread --mca btl self,tcp"
+export PROGRAM="/home/cpsc435_s12/mhurson/lab5/lab5 256 1"
+export PROGRAM2="/home/cpsc435_s12/mhurson/lab5/lab5 256 2"
+export PROGRAM3="/home/cpsc435_s12/mhurson/lab5/lab5 256 4"
+export PROGRAM4="/home/cpsc435_s12/mhurson/lab5/lab5 256 8"
+export PROGRAM5="/home/cpsc435_s12/mhurson/lab5/lab5 256 16"
+mpirun -np $NPROCS -machinefile $PBS_NODEFILE $MCA_OPTS $PROGRAM
+mpirun -np $NPROCS -machinefile $PBS_NODEFILE $MCA_OPTS $PROGRAM2
+mpirun -np $NPROCS -machinefile $PBS_NODEFILE $MCA_OPTS $PROGRAM3
+mpirun -np $NPROCS -machinefile $PBS_NODEFILE $MCA_OPTS $PROGRAM4
+mpirun -np $NPROCS -machinefile $PBS_NODEFILE $MCA_OPTS $PROGRAM5
+date
+exit 0
